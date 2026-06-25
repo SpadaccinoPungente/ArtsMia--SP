@@ -29,16 +29,16 @@ class View(ft.UserControl):
                                                      bgcolor="orange",
                                                      color="white",
                                                      width=200)
-        self._txtIdOggetto = ft.TextField(label="Id Oggetto", color="orange", border_color="orange")
+        self._txtIdOggetto = ft.TextField(label="Id Oggetto", color="orange", border_color="orange", on_change=self._controller.handleIdOggetto)
         self._btnCompConnessa = ft.ElevatedButton(text="Cerca Connessa", on_click=self._controller.handleCompConnessa,
                                                   bgcolor="orange",
                                                   color="white",
-                                                  width=200)
+                                                  width=200,
+                                                  disabled=True)
 
         self._page.controls.append(ft.Row([self._btnAnalizzaOggetti, self._txtIdOggetto, self._btnCompConnessa],
                                           alignment=ft.MainAxisAlignment.CENTER))
 
-        # List View where the reply is printed
         self.txt_result = ft.ListView(expand=1, spacing=10, padding=20, auto_scroll=True)
         self._page.controls.append(self.txt_result)
         self._page.update()
