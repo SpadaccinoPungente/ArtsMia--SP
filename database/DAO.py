@@ -9,7 +9,7 @@ class DAO:
         cursor = conn.cursor(dictionary = True)
 
         res = []
-        query = """SELECT o.title, o.style, o.object_name, o.object_id, o.nationality, dated, classification FROM objects o"""
+        query = """SELECT o.title, o.style, o.object_name, o.object_id, o.nationality, o.dated, o.classification FROM objects o"""
 
         cursor.execute(query)
 

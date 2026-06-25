@@ -19,10 +19,9 @@ class Controller:
     def handleCompConnessa(self, e):
         self._view.txt_result.controls.clear()
         dim_comp = self._model.getConnectedComponent(self.sel_obj_id)
-        self._view.txt_result.controls.append(ft.Text(f"La componente connessa contiene {self.dim_componente} vertici."))
+        self._view.txt_result.controls.append(ft.Text(f"La componente connessa contiene {dim_comp} vertici."))
 
-        if self.dim_componente >= 2:
-            # NOTA: In Flet si usa '.options' (non .controls) e i valori devono essere stringhe
+        if dim_comp >= 2:
             self._view._ddLun.options = [ft.dropdown.Option(str(n)) for n in range(2, dim_comp + 1)]
             self._view._ddLun.disabled = False
             self._view._btnCerca.disabled = False
@@ -46,5 +45,23 @@ class Controller:
         self._view.update_page()
 
     def handleCerca(self, e):
-        pass
+        self._view.txt_result.controls.clear()
+
+        if not self._view._ddLun.value:
+            self._view.txt_result.controls.append(ft.Text("Seleziona una lunghezza LUN dal menu!", color="red"))
+            self._view.update_page()
+            return
+
+        lun = int(self._view._ddLun.value)
+        cammino_ottimo, peso_totale = self._model.cerca_cammino(self.sel_obj_id, lun)
+
+        if not cammino_ottimo:
+            self._view.txt_result.controls.append(ft.Text("Nessun cammino trovato.", color="orange"))
+        else:
+            self._view.txt_result.controls.append(
+                ft.Text(f"Cammino massimo trovato! Peso totale: {peso_totale}", color="green"))
+            cammino_ordinato = sorted(cammino_ottimo, key=lambda x: x.object_name)
+            for obj in cammino_ordinato:
+                self._view.txt_result.controls.append(ft.Text(f"{obj.object_name} (ID: {obj.object_id})"))
+        self._view.update_page()
 
