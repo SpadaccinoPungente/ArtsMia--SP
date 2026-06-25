@@ -48,9 +48,6 @@ class Model:
         return self.best_path, self.best_score
 
     def _ricorsione(self, parziale, LUN, target_class):
-        # PRUNING (Uscita anticipata)
-        if len(parziale) > LUN:
-            return
 
         # CASO TERMINALE / OBIETTIVO
         if len(parziale) == LUN:

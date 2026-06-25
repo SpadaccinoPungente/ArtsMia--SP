@@ -13,6 +13,7 @@ class Controller:
         n_nodes, n_edges = self._model.getGraphDetails()
         if not n_nodes:
             self._view.txt_result.controls.append(ft.Text("Errore durante la creazione del grafo", color="red"))
+            return
         self._view.txt_result.controls.append(ft.Text(f"Grafo creato correttamente!\n{n_nodes} nodi e {n_edges} archi.", color="green"))
         self._view.update_page()
 
