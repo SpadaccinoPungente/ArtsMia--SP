@@ -13,10 +13,7 @@ class View(ft.UserControl):
         self._controller = None
         # graphical elements
         self._title = None
-        self.txt_name = None
-        self.btn_hello = None
         self.txt_result = None
-        self.txt_container = None
 
     def load_interface(self):
         # title
@@ -29,15 +26,37 @@ class View(ft.UserControl):
                                                      bgcolor="orange",
                                                      color="white",
                                                      width=200)
-        self._txtIdOggetto = ft.TextField(label="Id Oggetto", color="orange", border_color="orange", on_change=self._controller.handleIdOggetto)
+
+        self._txtIdOggetto = ft.TextField(label="Id Oggetto",
+                                          color="orange",
+                                          border_color="orange",
+                                          on_change=self._controller.handleIdOggetto)
+
         self._btnCompConnessa = ft.ElevatedButton(text="Cerca Connessa", on_click=self._controller.handleCompConnessa,
                                                   bgcolor="orange",
                                                   color="white",
                                                   width=200,
                                                   disabled=True)
 
-        self._page.controls.append(ft.Row([self._btnAnalizzaOggetti, self._txtIdOggetto, self._btnCompConnessa],
-                                          alignment=ft.MainAxisAlignment.CENTER))
+        self._page.controls.append(
+            ft.Row([self._btnAnalizzaOggetti, self._txtIdOggetto, self._btnCompConnessa],
+            alignment=ft.MainAxisAlignment.CENTER)
+        )
+
+        self._ddLun = ft.Dropdown(label="Lunghezza",
+                                  border_color="orange",
+                                  disabled=True)
+
+        self._btnCerca = ft.ElevatedButton(text="Cerca Oggetti",
+                                           on_click=self._controller.handleCerca,
+                                           bgcolor="orange",
+                                           color="white",
+                                           disabled=True)
+
+        self._page.controls.append(
+            ft.Row([self._ddLun, self._btnCerca],
+            alignment=ft.MainAxisAlignment.CENTER)
+        )
 
         self.txt_result = ft.ListView(expand=1, spacing=10, padding=20, auto_scroll=True)
         self._page.controls.append(self.txt_result)
