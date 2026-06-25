@@ -9,6 +9,7 @@ class ArtObject:
     object_id: int
     nationality: str
     dated: str
+    classification: str
 
     def __hash__(self):
         return hash(self.object_id)

@@ -1,3 +1,4 @@
+import copy
 import networkx as nx
 
 from database.DAO import DAO
@@ -7,6 +8,9 @@ class Model:
     def __init__(self):
         self.graph = nx.Graph()
         self.id_map_art_obj = {art_obj.object_id: art_obj for art_obj in DAO.getAllArtObjects()}
+
+        self.best_path = []
+        self.best_score = 0
 
     def buildGraph(self):
         self.graph.clear()
@@ -30,3 +34,51 @@ class Model:
         nodo = self.id_map_art_obj[obj_id]
         component = nx.node_connected_component(self.graph, nodo)
         return len(component)
+
+    def cerca_cammino(self, obj_id, LUN):
+        self.best_path = []
+        self.best_score = 0
+
+        nodo_partenza = self.id_map_art_obj[obj_id]
+        target_class = nodo_partenza.classification
+        parziale = [nodo_partenza]
+
+        self._ricorsione(parziale, LUN, target_class)
+
+        # Il testo chiede di ritornare gli oggetti ordinati alfabeticamente per nome
+        # Lo puoi fare qui prima di ritornarli al controller.
+        # Ritorna sempre il risultato da qui:
+        return self.best_path, self.best_score
+
+    def _ricorsione(self, parziale, LUN, target_class):
+        # PRUNING (Uscita anticipata)
+        if len(parziale) > LUN:
+            return
+
+        # CASO TERMINALE / OBIETTIVO
+        if len(parziale) == LUN:
+            score = self.get_score(parziale)
+            if score > self.best_score:
+                self.best_score = score
+                self.best_path = copy.deepcopy(parziale)
+            return
+
+        # GENERAZIONE MOSSE
+        ultimo_nodo = parziale[-1]
+        mosse_possibili = self.graph.neighbors(ultimo_nodo)
+
+        # CICLO FOR E BACKTRACKING
+        for mossa in mosse_possibili:
+            if mossa not in parziale and self.is_valid(mossa, target_class):
+                parziale.append(mossa)
+                self._ricorsione(parziale, LUN, target_class)
+                parziale.pop()
+
+    def is_valid(self, mossa, target_class):
+        return True if mossa.classification == target_class else False
+
+    def get_score(self, parziale):
+        score = 0
+        for nodo in parziale:
+            score += nodo.weight
+        return score

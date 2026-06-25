@@ -17,9 +17,17 @@ class Controller:
         self._view.update_page()
 
     def handleCompConnessa(self, e):
-        obj_id = int(self._view._txtIdOggetto.value)
-        size = self._model.getConnectedComponent(obj_id)
-        self._view.txt_result.controls.append(ft.Text(f"La componente connessa contiene {size} vertici."))
+        self._view.txt_result.controls.clear()
+        dim_comp = self._model.getConnectedComponent(self.sel_obj_id)
+        self._view.txt_result.controls.append(ft.Text(f"La componente connessa contiene {self.dim_componente} vertici."))
+
+        if self.dim_componente >= 2:
+            # NOTA: In Flet si usa '.options' (non .controls) e i valori devono essere stringhe
+            self._view._ddLun.options = [ft.dropdown.Option(str(n)) for n in range(2, dim_comp + 1)]
+            self._view._ddLun.disabled = False
+            self._view._btnCerca.disabled = False
+        else:
+            self._view.txt_result.controls.append(ft.Text("Dimensione insufficiente per cercare cammini.", color="red"))
         self._view.update_page()
 
     def handleIdOggetto(self, e):
@@ -32,18 +40,10 @@ class Controller:
         if self._model.checkNodeExists(self.sel_obj_id):
             self._view.txt_result.controls.append(ft.Text("Object_id valido!", color="green"))
             self._view._btnCompConnessa.disabled = False
-            self._view._ddLun.disabled = False
-            self._view._btnCerca.disabled = False
-            self.fillDDLun()
         else:
             self._view.txt_result.controls.append(ft.Text("Object_id non esistente nel grafo!", color="red"))
             self._view._btnCompConnessa.disabled = True
-            self._view._ddLun.disabled = True
-            self._view._btnCerca.disabled = True
         self._view.update_page()
-
-    def fillDDLun(self):
-        self._view._DDLun.controls = [ft.dropdown.Option(n) for n in range(2, self._model.getConnectedComponent(self.sel_obj_id))]
 
     def handleCerca(self, e):
         pass
