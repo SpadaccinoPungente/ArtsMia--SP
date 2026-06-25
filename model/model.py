@@ -79,6 +79,8 @@ class Model:
 
     def get_score(self, parziale):
         score = 0
-        for nodo in parziale:
-            score += nodo.weight
+        for i in range(len(parziale) - 1):
+            nodo_corrente = parziale[i]
+            nodo_successivo = parziale[i + 1]
+            score += self.graph[nodo_corrente][nodo_successivo]['weight']
         return score
