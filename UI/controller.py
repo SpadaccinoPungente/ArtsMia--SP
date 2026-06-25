@@ -15,15 +15,24 @@ class Controller:
         self._view.txt_result.controls.append(ft.Text(f"Grafo creato correttamente!\n{n_nodes} nodi e {n_edges} archi.", color="green"))
         self._view.update_page()
 
-    def handleCompConnessa(self,e):
-        pass
+    def handleCompConnessa(self, e):
+        obj_id = int(self._view._txtIdOggetto.value)
+        size = self._model.getConnectedComponent(obj_id)
+        self._view.txt_result.controls.append(ft.Text(f"La componente connessa contiene {size} vertici."))
+        self._view.update_page()
 
     def handleIdOggetto(self, e):
         self._view.txt_result.controls.clear()
-        if self._view._txtIdOggetto.value in self._model.getAllNodes():
+        try: obj_id = int(self._view._txtIdOggetto.value)
+        except ValueError:
+            self._view.txt_result.controls.append(ft.Text("Inserisci un numero intero valido!", color="red"))
+            self._view.update_page()
+            return
+        if self._model.checkNodeExists(obj_id):
             self._view.txt_result.controls.append(ft.Text("Object_id corretto!", color="green"))
             self._view._btnCompConnessa.disabled = False
-        self._view.txt_result.controls.append(ft.Text("Object_id non esistente!", color="red"))
-        self._view._btnCompConnessa.disabled = True
+        else:
+            self._view.txt_result.controls.append(ft.Text("Object_id non esistente nel grafo!", color="red"))
+            self._view._btnCompConnessa.disabled = True
         self._view.update_page()
 
