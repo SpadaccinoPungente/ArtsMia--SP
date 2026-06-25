@@ -37,7 +37,7 @@ class Model:
 
     def cerca_cammino(self, obj_id, LUN):
         self.best_path = []
-        self.best_score = 0
+        self.best_score = -1
 
         nodo_partenza = self.id_map_art_obj[obj_id]
         target_class = nodo_partenza.classification
@@ -45,9 +45,6 @@ class Model:
 
         self._ricorsione(parziale, LUN, target_class)
 
-        # Il testo chiede di ritornare gli oggetti ordinati alfabeticamente per nome
-        # Lo puoi fare qui prima di ritornarli al controller.
-        # Ritorna sempre il risultato da qui:
         return self.best_path, self.best_score
 
     def _ricorsione(self, parziale, LUN, target_class):

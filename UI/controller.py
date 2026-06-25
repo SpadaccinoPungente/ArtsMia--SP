@@ -18,6 +18,15 @@ class Controller:
 
     def handleCompConnessa(self, e):
         self._view.txt_result.controls.clear()
+
+        if self._model.graph.number_of_nodes() == 0:
+            self._model.buildGraph()
+
+        if self.sel_obj_id is None:
+            self._view.txt_result.controls.append(ft.Text("Inserisci e verifica prima un ID oggetto!", color="red"))
+            self._view.update_page()
+            return
+
         dim_comp = self._model.getConnectedComponent(self.sel_obj_id)
         self._view.txt_result.controls.append(ft.Text(f"La componente connessa contiene {dim_comp} vertici."))
 
@@ -27,6 +36,9 @@ class Controller:
             self._view._btnCerca.disabled = False
         else:
             self._view.txt_result.controls.append(ft.Text("Dimensione insufficiente per cercare cammini.", color="red"))
+            self._view._ddLun.disabled = True
+            self._view._btnCerca.disabled = True
+
         self._view.update_page()
 
     def handleIdOggetto(self, e):
